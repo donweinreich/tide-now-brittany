@@ -1,0 +1,420 @@
+<style>
+  .mb-tool {
+    --navy: #0B2E4F;
+    --navy-deep: #071D33;
+    --seafoam: #3FA79E;
+    --seafoam-light: #DCEEEC;
+    --amber: #E0A458;
+    --bg: #EDF3F2;
+    --ink: #16323F;
+    --ink-soft: #567077;
+    --line: #C7D6D4;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 28px 20px 40px;
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+  .mb-tool * { box-sizing: border-box; }
+  .mb-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(11,46,79,0.06);
+  }
+  .mb-header {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: #E8DCC4;
+    padding: 22px 26px 20px;
+  }
+  .mb-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--seafoam);
+    margin: 0 0 6px;
+  }
+  .mb-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .mb-sub {
+    font-size: 13px;
+    color: #AFC6C9;
+    margin: 6px 0 0;
+  }
+  .mb-controls {
+    display: flex;
+    gap: 12px;
+    padding: 18px 26px;
+    background: var(--seafoam-light);
+    border-bottom: 1px solid var(--line);
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .mb-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 200px; }
+  .mb-field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .mb-field select {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: #fff;
+    color: var(--ink);
+  }
+  .mb-btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 18px;
+    background: var(--seafoam);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .mb-btn:hover { background: #328c84; }
+  .mb-body { padding: 22px 26px 26px; }
+  .mb-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 4px 0 18px;
+    min-height: 16px;
+  }
+  .mb-status.error { color: #B4483A; }
+
+  .mb-now {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 22px;
+    background: var(--seafoam-light);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .mb-now-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+  }
+  .mb-now-main {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .mb-now-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .mb-now-arrow { font-size: 34px; line-height: 1; font-weight: 700; }
+  .mb-now-arrow.rising { color: #2E9E5B; }
+  .mb-now-arrow.falling { color: #C23B2E; }
+  .mb-now-trend {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .mb-next {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 10px 14px;
+  }
+  .mb-next b { color: var(--navy); }
+  .mb-caveat {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .mb-source {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .mb-source a { color: var(--navy); }
+
+  .mb-official {
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+  .mb-official-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 4px;
+  }
+  .mb-official-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0 0 10px;
+  }
+  .mb-official-frame-wrap {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    min-height: 200px;
+  }
+  .mb-official-frame-wrap iframe {
+    width: 100%;
+    height: 900px;
+    border: 0;
+    display: block;
+  }
+  .mb-official-note {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+</style>
+
+<div class="mb-tool">
+  <div class="mb-card">
+    <div class="mb-header">
+      <p class="mb-eyebrow">SHOM · REFMAR · Real-Time Observations</p>
+      <h1 class="mb-title">Tide Now — Brittany Coast</h1>
+      <p class="mb-sub">Observed water height, trend, and estimated next tide change</p>
+    </div>
+
+    <div class="mb-controls">
+      <div class="mb-field">
+        <label for="mb-station">Tide gauge station</label>
+        <select id="mb-station">
+          <option value="410">Saint-Malo</option>
+          <option value="54">Roscoff</option>
+          <option value="152">Le Conquet</option>
+          <option value="3" selected>Brest</option>
+          <option value="160">Concarneau</option>
+          <option value="71">Port-Tudy (Île de Groix)</option>
+          <option value="185">Le Crouesty</option>
+        </select>
+      </div>
+      <button class="mb-btn" id="mb-fetch">Refresh</button>
+    </div>
+
+    <div class="mb-body">
+      <p class="mb-status" id="mb-status">Loading SHOM data…</p>
+      <div class="mb-now" id="mb-now"></div>
+      <p class="mb-caveat" id="mb-caveat"></p>
+
+      <div class="mb-official">
+        <p class="mb-official-label">Official SHOM Predictions</p>
+        <h2 class="mb-official-title">Predicted High/Low Tides &amp; Daily Chart</h2>
+        <div class="mb-official-frame-wrap">
+          <iframe id="mb-official-widget" title="Official SHOM tide predictions"></iframe>
+        </div>
+        <p class="mb-official-note">
+          Live official predictions embedded directly from SHOM's free public widget (services.data.shom.fr) —
+          includes 7 days of predicted high (PM) and low (BM) tide times with heights and coefficients, plus SHOM's
+          own interactive tide-height chart for the day. Rendered in French by SHOM (no English version is offered
+          by this widget). This is separate from the "Tide Now" panel above, which uses live observed data rather
+          than predictions.
+        </p>
+      </div>
+
+      <p class="mb-source">
+        "Tide Now" source: real-time observation data from the REFMAR network (SHOM), free access, no key required —
+        <a href="https://data.shom.fr" target="_blank" rel="noopener">data.shom.fr</a>.
+        Heights are relative to zéro hydrographique (SHOM's standard chart datum, close to but not technically identical to "Mean Low Water").
+        SHOM's paid prediction API was not used anywhere in this page; the official predictions above are pulled from SHOM's free embeddable widget instead
+        (<a href="https://maree.shom.fr" target="_blank" rel="noopener">maree.shom.fr</a>), and the "next tide change" estimate in the Tide Now panel is a rough approximation from observed trend, independent of that official widget.
+        "Tide Now" auto-refreshes every 10 minutes.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const stationSel = document.getElementById('mb-station');
+  const fetchBtn = document.getElementById('mb-fetch');
+  const officialWidget = document.getElementById('mb-official-widget');
+
+  // The free SHOM vignette widget identifies harbors by name rather than the
+  // numeric REFMAR station IDs used for observed data above.
+  const VIGNETTE_HARBOR_NAMES = {
+    '410': 'SAINT-MALO',
+    '54': 'ROSCOFF',
+    '152': 'LE_CONQUET',
+    '3': 'BREST',
+    '160': 'CONCARNEAU',
+    '71': 'PORT-TUDY',
+    '185': 'LE_CROUESTY'
+  };
+
+  function updateOfficialIframe() {
+    const harborName = VIGNETTE_HARBOR_NAMES[stationSel.value];
+    if (!harborName) return;
+    const widgetUrl = `https://services.data.shom.fr/hdm/vignette/grande/${harborName}?locale=fr`;
+    // The SHOM widget calls document.write() to build its own inner iframe.
+    // Modern browsers block document.write() from a script inserted after
+    // the page has already loaded, so a plain dynamically-appended <script>
+    // tag gets silently ignored. Giving it a brand-new document via
+    // iframe.srcdoc (with the script tag present in that document's own
+    // initial markup) lets that document.write() run during a fresh parse,
+    // which browsers still allow.
+    officialWidget.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
+      <body style="margin:0;padding:0;">
+        <script type="text/javascript" src="${widgetUrl}"><\/script>
+      </body></html>`;
+  }
+  const statusEl = document.getElementById('mb-status');
+  const nowEl = document.getElementById('mb-now');
+  const caveatEl = document.getElementById('mb-caveat');
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  // REFMAR timestamps are UTC ("YYYY/MM/DD HH:MM:SS"); convert to a real Date.
+  function parseRefmarUTC(ts) {
+    const [datePart, timePart] = ts.split(' ');
+    const [y, m, d] = datePart.split('/').map(Number);
+    const [hh, mm, ss] = timePart.split(':').map(Number);
+    return new Date(Date.UTC(y, m - 1, d, hh, mm, ss));
+  }
+
+  function fmtParisTime(date) {
+    return date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris'
+    });
+  }
+  function fmtParisDateTime(date) {
+    return date.toLocaleString('fr-FR', {
+      day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris'
+    });
+  }
+
+  function toApiDateTime(date) {
+    return date.toISOString().slice(0, 19) + 'Z';
+  }
+
+  // Find the most recent local extremum (peak or trough) in the series,
+  // then project the next one forward using the average semi-diurnal
+  // tidal period (M2 constituent, ~12h25m -> ~6h12.5m between extrema).
+  // This is a rough estimate, not a harmonic prediction.
+  const SEMI_DIURNAL_MS = (12 * 60 + 25.2) / 2 * 60 * 1000;
+
+  function findLastExtremum(points) {
+    for (let i = points.length - 2; i >= 1; i--) {
+      const prev = points[i - 1].value;
+      const cur = points[i].value;
+      const next = points[i + 1].value;
+      if ((cur >= prev && cur >= next) || (cur <= prev && cur <= next)) {
+        const type = (cur >= prev && cur >= next) ? 'H' : 'L';
+        return { time: points[i].time, value: cur, type };
+      }
+    }
+    return null;
+  }
+
+  async function fetchStation(stationId) {
+    const now = new Date();
+    const start = new Date(now.getTime() - 20 * 60 * 60 * 1000); // 20h buffer for extremum detection
+    const url = `https://services.data.shom.fr/maregraphie/observation/json/${stationId}?sources=1&dtStart=${toApiDateTime(start)}&dtEnd=${toApiDateTime(now)}`;
+
+    const res = await fetch(url);
+    const json = await res.json();
+    if (!json.data || json.data.length === 0) {
+      throw new Error('No observations available for this station right now.');
+    }
+
+    const points = json.data
+      .map(p => ({ time: parseRefmarUTC(p.timestamp), value: p.value }))
+      .sort((a, b) => a.time - b.time);
+
+    return points;
+  }
+
+  async function loadTide() {
+    const stationId = stationSel.value;
+    const stationName = stationSel.options[stationSel.selectedIndex].text;
+
+    statusEl.classList.remove('error');
+    statusEl.textContent = 'Loading SHOM data…';
+    nowEl.innerHTML = '';
+    caveatEl.textContent = '';
+
+    try {
+      const points = await fetchStation(stationId);
+      const latest = points[points.length - 1];
+      const tenMinAgoTarget = new Date(latest.time.getTime() - 10 * 60 * 1000);
+
+      let prevPoint = points[0];
+      for (const p of points) {
+        if (p.time <= tenMinAgoTarget) prevPoint = p;
+        else break;
+      }
+
+      const rising = latest.value > prevPoint.value;
+      const delta = Math.abs(latest.value - prevPoint.value);
+      const arrow = rising ? '▲' : '▼';
+      const arrowClass = rising ? 'rising' : 'falling';
+      const trendLabel = rising ? 'Rising tide' : 'Falling tide';
+
+      const lastExtremum = findLastExtremum(points);
+      let nextChangeStr = 'Estimate unavailable at the moment.';
+      if (lastExtremum) {
+        const nextTime = new Date(lastExtremum.time.getTime() + SEMI_DIURNAL_MS);
+        const nextType = lastExtremum.type === 'H' ? 'low tide' : 'high tide';
+        nextChangeStr = `Next <b>${nextType}</b> estimated around <b>${fmtParisDateTime(nextTime)}</b> (Paris time)`;
+      }
+
+      const nowParis = new Date();
+      nowEl.innerHTML = `
+        <div class="mb-now-time">🕐 ${fmtParisTime(nowParis)} — local time (Paris)</div>
+        <div class="mb-now-main">
+          <span class="mb-now-value">${latest.value.toFixed(2)} m</span>
+          <span class="mb-now-arrow ${arrowClass}">${arrow}</span>
+          <span class="mb-now-trend">${trendLabel} · ~${delta.toFixed(2)} m / 10 min</span>
+        </div>
+        <div class="mb-next">${nextChangeStr}</div>
+      `;
+
+      const obsAgeMin = Math.round((nowParis - latest.time) / 60000);
+      statusEl.textContent = `${stationName} — last observation at ${fmtParisTime(latest.time)} (${obsAgeMin} min ago).`;
+      caveatEl.textContent = '⚠️ The "next tide change" is an estimate based on the recent trend and the average semi-diurnal tidal period (~6h12m), not an official SHOM prediction.';
+    } catch (err) {
+      statusEl.classList.add('error');
+      statusEl.textContent = 'Error: ' + err.message;
+    }
+  }
+
+  fetchBtn.addEventListener('click', loadTide);
+  stationSel.addEventListener('change', updateOfficialIframe);
+  updateOfficialIframe();
+  loadTide();
+  setInterval(loadTide, 10 * 60 * 1000);
+})();
+</script>
