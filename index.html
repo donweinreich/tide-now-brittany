@@ -79,13 +79,21 @@
   .mb-btn {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 14px;
-    padding: 9px 18px;
+    font-size: 12.5px;
     background: var(--seafoam);
     color: #fff;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    align-self: stretch;
+    aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
   }
   .mb-btn:hover { background: #328c84; }
   .mb-body { padding: 22px 26px 26px; }
@@ -160,45 +168,28 @@
   }
   .mb-source a { color: var(--navy); }
 
-  .mb-official {
-    margin-top: 24px;
-    border-top: 1px solid var(--line);
-    padding-top: 20px;
+  .mb-chart-wrap {
+    margin-top: 4px;
+    margin-bottom: 22px;
   }
-  .mb-official-label {
+  .mb-chart-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    margin: 0 0 4px;
+    margin: 0 0 8px;
   }
-  .mb-official-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 19px;
-    font-weight: 600;
-    color: var(--navy);
-    margin: 0 0 10px;
-  }
-  .mb-official-frame-wrap {
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    min-height: 200px;
-  }
-  .mb-official-frame-wrap iframe {
-    width: 100%;
-    height: 900px;
-    border: 0;
-    display: block;
-  }
-  .mb-official-note {
+  .mb-chart-legend {
+    display: flex;
+    gap: 16px;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--ink-soft);
-    margin-top: 8px;
-    line-height: 1.5;
+    margin-top: 6px;
   }
+  .mb-chart-legend span { display: flex; align-items: center; gap: 5px; }
+  .mb-chart-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 </style>
 
 <div class="mb-tool">
@@ -210,17 +201,26 @@
     </div>
 
     <div class="mb-controls">
-      <div class="mb-field">
-        <label for="mb-station">Tide gauge station</label>
-        <select id="mb-station">
-          <option value="410">Saint-Malo</option>
-          <option value="54">Roscoff</option>
-          <option value="152">Le Conquet</option>
-          <option value="3" selected>Brest</option>
-          <option value="160">Concarneau</option>
-          <option value="71">Port-Tudy (Île de Groix)</option>
-          <option value="185">Le Crouesty</option>
-        </select>
+      <div style="display:flex; flex-direction:column; gap:12px; flex:1; min-width:200px;">
+        <div class="mb-field" style="min-width:0;">
+          <label for="mb-station">Tide gauge station</label>
+          <select id="mb-station">
+            <option value="410">Saint-Malo</option>
+            <option value="54">Roscoff</option>
+            <option value="152">Le Conquet</option>
+            <option value="3" selected>Brest</option>
+            <option value="160">Concarneau</option>
+            <option value="71">Port-Tudy (Île de Groix)</option>
+            <option value="185">Le Crouesty</option>
+          </select>
+        </div>
+        <div class="mb-field" style="min-width:0;">
+          <label for="mb-units">Units</label>
+          <select id="mb-units">
+            <option value="metric" selected>Metric (meters)</option>
+            <option value="imperial">Imperial (feet)</option>
+          </select>
+        </div>
       </div>
       <button class="mb-btn" id="mb-fetch">Refresh</button>
     </div>
@@ -230,28 +230,17 @@
       <div class="mb-now" id="mb-now"></div>
       <p class="mb-caveat" id="mb-caveat"></p>
 
-      <div class="mb-official">
-        <p class="mb-official-label">Official SHOM Predictions</p>
-        <h2 class="mb-official-title">Predicted High/Low Tides &amp; Daily Chart</h2>
-        <div class="mb-official-frame-wrap">
-          <iframe id="mb-official-widget" title="Official SHOM tide predictions"></iframe>
-        </div>
-        <p class="mb-official-note">
-          Live official predictions embedded directly from SHOM's free public widget (services.data.shom.fr) —
-          includes 7 days of predicted high (PM) and low (BM) tide times with heights and coefficients, plus SHOM's
-          own interactive tide-height chart for the day. Rendered in French by SHOM (no English version is offered
-          by this widget). This is separate from the "Tide Now" panel above, which uses live observed data rather
-          than predictions.
-        </p>
+      <div class="mb-chart-wrap">
+        <p class="mb-chart-label">Today's Observed Tide Curve</p>
+        <div id="mb-chart-svg"></div>
       </div>
 
       <p class="mb-source">
         "Tide Now" source: real-time observation data from the REFMAR network (SHOM), free access, no key required —
         <a href="https://data.shom.fr" target="_blank" rel="noopener">data.shom.fr</a>.
         Heights are relative to zéro hydrographique (SHOM's standard chart datum, close to but not technically identical to "Mean Low Water").
-        SHOM's paid prediction API was not used anywhere in this page; the official predictions above are pulled from SHOM's free embeddable widget instead
-        (<a href="https://maree.shom.fr" target="_blank" rel="noopener">maree.shom.fr</a>), and the "next tide change" estimate in the Tide Now panel is a rough approximation from observed trend, independent of that official widget.
-        "Tide Now" auto-refreshes every 10 minutes.
+        The "next tide change" estimate is a rough approximation from the observed trend, not an official SHOM prediction.
+        Auto-refreshes every 15 minutes.
       </p>
     </div>
   </div>
@@ -260,40 +249,20 @@
 <script>
 (function() {
   const stationSel = document.getElementById('mb-station');
+  const unitsSel = document.getElementById('mb-units');
   const fetchBtn = document.getElementById('mb-fetch');
-  const officialWidget = document.getElementById('mb-official-widget');
-
-  // The free SHOM vignette widget identifies harbors by name rather than the
-  // numeric REFMAR station IDs used for observed data above.
-  const VIGNETTE_HARBOR_NAMES = {
-    '410': 'SAINT-MALO',
-    '54': 'ROSCOFF',
-    '152': 'LE_CONQUET',
-    '3': 'BREST',
-    '160': 'CONCARNEAU',
-    '71': 'PORT-TUDY',
-    '185': 'LE_CROUESTY'
-  };
-
-  function updateOfficialIframe() {
-    const harborName = VIGNETTE_HARBOR_NAMES[stationSel.value];
-    if (!harborName) return;
-    const widgetUrl = `https://services.data.shom.fr/hdm/vignette/grande/${harborName}?locale=fr`;
-    // The SHOM widget calls document.write() to build its own inner iframe.
-    // Modern browsers block document.write() from a script inserted after
-    // the page has already loaded, so a plain dynamically-appended <script>
-    // tag gets silently ignored. Giving it a brand-new document via
-    // iframe.srcdoc (with the script tag present in that document's own
-    // initial markup) lets that document.write() run during a fresh parse,
-    // which browsers still allow.
-    officialWidget.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-      <body style="margin:0;padding:0;">
-        <script type="text/javascript" src="${widgetUrl}"><\/script>
-      </body></html>`;
-  }
   const statusEl = document.getElementById('mb-status');
   const nowEl = document.getElementById('mb-now');
+  const chartSvgEl = document.getElementById('mb-chart-svg');
   const caveatEl = document.getElementById('mb-caveat');
+
+  const METERS_TO_FEET = 3.28084;
+  function convertHeight(m) {
+    return unitsSel.value === 'imperial' ? m * METERS_TO_FEET : m;
+  }
+  function unitLabel() {
+    return unitsSel.value === 'imperial' ? 'ft' : 'm';
+  }
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
@@ -325,6 +294,60 @@
   // tidal period (M2 constituent, ~12h25m -> ~6h12.5m between extrema).
   // This is a rough estimate, not a harmonic prediction.
   const SEMI_DIURNAL_MS = (12 * 60 + 25.2) / 2 * 60 * 1000;
+
+  function buildTideChart(rawPoints) {
+    const points = rawPoints.map(p => ({ time: p.time, value: convertHeight(p.value) }));
+    const w = 660, h = 200, padL = 46, padR = 16, padT = 16, padB = 28;
+    const values = points.map(p => p.value);
+    const minV = Math.min(...values) - 0.3;
+    const maxV = Math.max(...values) + 0.3;
+    const t0 = points[0].time.getTime();
+    const t1 = points[points.length - 1].time.getTime();
+    const span = t1 - t0 || 1;
+
+    const xFor = t => padL + ((t - t0) / span) * (w - padL - padR);
+    const yFor = v => padT + (1 - (v - minV) / (maxV - minV)) * (h - padT - padB);
+
+    let path = '';
+    points.forEach((p, i) => {
+      const x = xFor(p.time.getTime()), y = yFor(p.value);
+      path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+    });
+
+    let gridLines = '';
+    const hourTicks = 4;
+    for (let i = 0; i <= hourTicks; i++) {
+      const t = t0 + (i / hourTicks) * span;
+      const x = xFor(t);
+      const label = new Date(t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+      gridLines += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${h - padB}" stroke="#C7D6D4" stroke-width="1" stroke-dasharray="2,3"/>`;
+      gridLines += `<text x="${x}" y="${h - padB + 16}" font-family="JetBrains Mono, monospace" font-size="10" fill="#567077" text-anchor="middle">${label}</text>`;
+    }
+
+    let yTicks = '';
+    const vTicks = 3;
+    for (let i = 0; i <= vTicks; i++) {
+      const v = minV + (i / vTicks) * (maxV - minV);
+      const y = yFor(v);
+      yTicks += `<line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="#E5EDEC" stroke-width="1"/>`;
+      yTicks += `<text x="${padL - 8}" y="${y + 3}" font-family="JetBrains Mono, monospace" font-size="10" fill="#567077" text-anchor="end">${v.toFixed(1)}${unitLabel()}</text>`;
+    }
+
+    const last = points[points.length - 1];
+    const nowX = xFor(last.time.getTime());
+    const nowY = yFor(last.value);
+    const nowMark = `
+      <circle cx="${nowX.toFixed(1)}" cy="${nowY.toFixed(1)}" r="10" fill="#1D5FD6" opacity="0.18"/>
+      <circle cx="${nowX.toFixed(1)}" cy="${nowY.toFixed(1)}" r="6" fill="#1D5FD6" stroke="#fff" stroke-width="2"/>
+    `;
+
+    return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto;display:block;">
+      ${yTicks}
+      ${gridLines}
+      <path d="${path}" fill="none" stroke="#0B2E4F" stroke-width="2.25" stroke-linejoin="round" stroke-linecap="round"/>
+      ${nowMark}
+    </svg>`;
+  }
 
   function findLastExtremum(points) {
     for (let i = points.length - 2; i >= 1; i--) {
@@ -369,11 +392,11 @@
     try {
       const points = await fetchStation(stationId);
       const latest = points[points.length - 1];
-      const tenMinAgoTarget = new Date(latest.time.getTime() - 10 * 60 * 1000);
+      const fifteenMinAgoTarget = new Date(latest.time.getTime() - 15 * 60 * 1000);
 
       let prevPoint = points[0];
       for (const p of points) {
-        if (p.time <= tenMinAgoTarget) prevPoint = p;
+        if (p.time <= fifteenMinAgoTarget) prevPoint = p;
         else break;
       }
 
@@ -395,9 +418,9 @@
       nowEl.innerHTML = `
         <div class="mb-now-time">🕐 ${fmtParisTime(nowParis)} — local time (Paris)</div>
         <div class="mb-now-main">
-          <span class="mb-now-value">${latest.value.toFixed(2)} m</span>
+          <span class="mb-now-value">${convertHeight(latest.value).toFixed(2)} ${unitLabel()}</span>
           <span class="mb-now-arrow ${arrowClass}">${arrow}</span>
-          <span class="mb-now-trend">${trendLabel} · ~${delta.toFixed(2)} m / 10 min</span>
+          <span class="mb-now-trend">${trendLabel} · ~${convertHeight(delta).toFixed(2)} ${unitLabel()} / 15 min</span>
         </div>
         <div class="mb-next">${nextChangeStr}</div>
       `;
@@ -405,6 +428,12 @@
       const obsAgeMin = Math.round((nowParis - latest.time) / 60000);
       statusEl.textContent = `${stationName} — last observation at ${fmtParisTime(latest.time)} (${obsAgeMin} min ago).`;
       caveatEl.textContent = '⚠️ The "next tide change" is an estimate based on the recent trend and the average semi-diurnal tidal period (~6h12m), not an official SHOM prediction.';
+
+      chartSvgEl.innerHTML = buildTideChart(points);
+      chartSvgEl.insertAdjacentHTML('beforeend', `<div class="mb-chart-legend">
+        <span><span class="mb-chart-dot" style="background:#0B2E4F;"></span>Observed height</span>
+        <span><span class="mb-chart-dot" style="background:#1D5FD6;"></span>Now</span>
+      </div>`);
     } catch (err) {
       statusEl.classList.add('error');
       statusEl.textContent = 'Error: ' + err.message;
@@ -412,9 +441,9 @@
   }
 
   fetchBtn.addEventListener('click', loadTide);
-  stationSel.addEventListener('change', updateOfficialIframe);
-  updateOfficialIframe();
+  stationSel.addEventListener('change', loadTide);
+  unitsSel.addEventListener('change', loadTide);
   loadTide();
-  setInterval(loadTide, 10 * 60 * 1000);
+  setInterval(loadTide, 15 * 60 * 1000);
 })();
 </script>
